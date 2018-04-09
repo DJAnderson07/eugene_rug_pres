@@ -108,7 +108,8 @@ Once you've written more than one function, you may want to bundle them. There a
 # More importantly
 .Large[Bundling functions into a package is not that hard!]
 
-<center><iframe src="https://giphy.com/embed/3ohzdTQaODeGPt90uk" width="480" height="287" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/lamala-roc-nation-victoria-ortiz-3ohzdTQaODeGPt90uk">via GIPHY</a></p></center>
+![](https://media.giphy.com/media/3ohzdTQaODeGPt90uk/source.gif)
+
 
 ---
 class: inverse middle center
@@ -529,15 +530,26 @@ class: center
 # 🎉 Hooray! 🎉
 ### You have a package!
 
-
-<iframe src="https://giphy.com/embed/GXrdixoDLFlL2" width="600" height="380" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/upvote-f5-GXrdixoDLFlL2">via GIPHY</a></p>
+<img src = "https://thumbs.gfycat.com/TotalAffectionateHammerheadbird-max-1mb.gif" width = 600 height = 380 />
 
 ---
 # A few other best practices
 * Create a `README` with `usethis::use_readme_rmd`.
+
+--
+
 * Try to get your [code coverage](https://en.wikipedia.org/wiki/Code_coverage) up above 80%.
+
+--
+
 * Automate wherever possible ({devtools} and {usethis} help a lot with this)
-* Use the {goodpractice} package to help you package code be more robust, specifically with `goodpractice::gp()`. It will give you lots of good ideas
+
+--
+
+* Use the [{goodpractice}](https://github.com/MangoTheCat/goodpractice) package to help you package code be more robust, specifically with `goodpractice::gp()`. It will give you lots of good ideas
+
+--
+
 * Host on GitHub, and capitalize on integration with other systems (all free, but require registering for an account)
   + [Travis CI](https://travis-ci.org)
   + [Appveyor](https://www.appveyor.com)
@@ -560,7 +572,7 @@ class: center middle
 # Quickly
 * Get started with `usethis::use_git`, followed by `usethis::use_github`.
 
-> For this to work, you’ll need to set a GITHUB_PAT environment variable in your ~/.Renviron. Follow [Jenny Bryan’s](http://happygitwithr.com/github-pat.html#step-by-step) instructions, and use edit_r_environ() to easily access the right file for editing
+> For this to work, you’ll need to set a GITHUB_PAT environment variable in your ~/.Renviron. Follow [Jenny Bryan’s](http://happygitwithr.com/github-pat.html#step-by-step) instructions, and use `edit_r_environ()` to easily access the right file for editing
 
 
 .green[Note: I haven't played around with this much. Standard git procedures will work too.]
@@ -569,6 +581,8 @@ class: center middle
 # Create a `README`
 * Use standard R Markdown. Setup the infrastructure with `usethis::use_readme_rmd`. 
 * Write it just like a normal R Markdown doc and it should all flow into the `README`.
+
+<img src = "img/esvis-README.png" height = 325 />
 
 ---
 # Use Travis/Appveyor
@@ -591,7 +605,7 @@ You can test your code coverage each time you push a new commit by using [codeco
 
 Easily see what is/is not covered by tests!
 
-![codcov](img/codecov.png)
+<img src = "img/codecov.png" height = 325 />
 
 ---
 class: inverse center middle
