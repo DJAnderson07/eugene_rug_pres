@@ -2,13 +2,13 @@
 title: "Developing Your First R Package"
 subtitle: "A Case Study with esvis"
 author: "Daniel Anderson"
-date: "2018/12/12"
+date: "04-10-2018"
 output:
   xaringan::moon_reader:
     css: ["default", "uo", "uo-fonts", "hygge"]
     lib_dir: libs
     nature:
-      highlightStyle: rainbow
+      highlightStyle: atelier-dune-light
       highlightLines: true
       countIncrementalSlides: false
 ---
@@ -140,10 +140,10 @@ Standardized mean differences
 library(tidyverse)
 common_var <- tibble(low  = rnorm(1000, 10, 1),
                      high = rnorm(1000, 12, 1),
-                     var = "common")
+                     var  = "common")
 diff_var <- tibble(low  = rnorm(1000, 10, 1),
                    high = rnorm(1000, 12, 2),
-                   var = "diff")
+                   var  = "diff")
 d <- bind_rows(common_var, diff_var)
 head(d)
 ```
@@ -250,9 +250,19 @@ class: inverse middle center
 --
 
 7. Host your package somewhere public .grey[(GitHub is probably best)] and promote it - leverage the power of open source!
+
 --
 
-8. Use tools .grey[(which we'll talk about momentarily)] to help automate many of the steps, and make the whole thing less painful
+Use tools throughout .grey[(which we'll talk about momentarily)] to help automate many of the steps, and make the whole thing less painful
+
+---
+# A really good point
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">1a) check that no one had the same idea 😇</p>&mdash; Maëlle Salmon 🐟 (@ma_salmon) <a href="https://twitter.com/ma_salmon/status/983572108474241025?ref_src=twsrc%5Etfw">April 10, 2018</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<br/>
+
+[And some further recommendations/good advice](http://www.masalmon.eu/2017/12/11/goodrpackages/)
 
 ---
 # Some resources 
@@ -270,7 +280,7 @@ We surely won't get through all the steps tonight. In my mind, the best resource
 
 --
 
-.footnote[For a really quick but really good intro, see [Hilary Parker's](https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/comment-page-2/) blog post]
+.footnote[For a really quick but really good intro, see [Hilary Parker's](https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/) blog post]
 
 
 
@@ -304,6 +314,122 @@ describe <- function(x) {
                         mean      = mn, 
                         sd        = stdev)
   out
+}
+```
+
+
+---
+# The approach I took...
+
+```{r fun_h1}
+describe <- function(x) {
+  {{n     <- as.integer(length(na.omit(x)))}} # Count number of valid cases
+  nmiss <- as.integer(sum(is.na(x)))
+  mn    <- mean(x, na.rm = TRUE)
+  stdev <- sd(x, na.rm = TRUE)
+  
+  out <- tibble::tibble(n_valid   = n, 
+                        n_missing = nmiss, 
+                        mean      = mn, 
+                        sd        = stdev)
+  out
+}
+```
+
+
+---
+# The approach I took...
+
+```{r fun_h2}
+describe <- function(x) {
+  n     <- as.integer(length(na.omit(x))) 
+  {{nmiss <- as.integer(sum(is.na(x)))}} # Count the number of missing
+  mn    <- mean(x, na.rm = TRUE)
+  stdev <- sd(x, na.rm = TRUE)
+  
+  out <- tibble::tibble(n_valid   = n, 
+                        n_missing = nmiss, 
+                        mean      = mn, 
+                        sd        = stdev)
+  out
+}
+```
+
+
+---
+# The approach I took...
+
+```{r fun_h3}
+describe <- function(x) {
+  n     <- as.integer(length(na.omit(x)))
+  nmiss <- as.integer(sum(is.na(x)))
+  {{mn    <- mean(x, na.rm = TRUE)}} # Calculate mean
+  stdev <- sd(x, na.rm = TRUE)
+  
+  out <- tibble::tibble(n_valid   = n, 
+                        n_missing = nmiss, 
+                        mean      = mn, 
+                        sd        = stdev)
+  out
+}
+```
+
+
+---
+# The approach I took...
+
+```{r fun_h4}
+describe <- function(x) {
+  n     <- as.integer(length(na.omit(x)))
+  nmiss <- as.integer(sum(is.na(x)))
+  mn    <- mean(x, na.rm = TRUE)
+  {{stdev <- sd(x, na.rm = TRUE)}} # Standard deviation
+  
+  out <- tibble::tibble(n_valid   = n, 
+                        n_missing = nmiss, 
+                        mean      = mn, 
+                        sd        = stdev)
+  out
+}
+```
+
+
+
+---
+# The approach I took...
+
+```{r fun_h5}
+describe <- function(x) {
+  n     <- as.integer(length(na.omit(x)))
+  nmiss <- as.integer(sum(is.na(x)))
+  mn    <- mean(x, na.rm = TRUE)
+  stdev <- sd(x, na.rm = TRUE)
+  
+  {{out <- tibble::tibble(n_valid   = n,     # Bundle it all
+                        n_missing = nmiss, 
+                        mean      = mn, 
+                        sd        = stdev)}}
+  out
+}
+```
+
+
+
+---
+# The approach I took...
+
+```{r fun_h6}
+describe <- function(x) {
+  n     <- as.integer(length(na.omit(x)))
+  nmiss <- as.integer(sum(is.na(x)))
+  mn    <- mean(x, na.rm = TRUE)
+  stdev <- sd(x, na.rm = TRUE)
+  
+  out <- tibble::tibble(n_valid   = n, 
+                        n_missing = nmiss, 
+                        mean      = mn, 
+                        sd        = stdev)
+  {{out}} # Return the tibble
 }
 ```
 
@@ -456,19 +582,18 @@ class: inverse
 
 ---
 # Declare dependencies
-* The function **depends on** the [{tibble}](https://www.tidyverse.org/articles/2018/01/tibble-1-4-2/) package. 
+* The function **depends on** the `tibble` function within the [{tibble}](https://www.tidyverse.org/articles/2018/01/tibble-1-4-2/) package. 
 * We have to declare this dependency
 
 --
 
 ## My preferred approach
-* Create a package documentation page.
-  + roxygen parameters: 
-    - `#' @doctype Package`
-    - `#' @name pkg_name`
-* Declare all dependencies for your package there.
-* Only import the functions you need - not the entire package
-  + Use `#' importFrom pkg fun_name`
+* Declare package dependencies: `usethis::use_package`
+* Create a package documentation page: `usethis::use_package_doc`
+  + Declare all dependencies for your package there
+  + Only import the functions you need - not the entire package
+      - Use `#' importFrom pkg fun_name`
+* Generally won't have to worry about namespacing (`tibble::tibble` becomes just plain old `tibble`). The likelihood of conflicts is also reduced, so long as you don't import the full package.
 
 ---
 class: inverse center middle
@@ -484,7 +609,7 @@ class: inverse center middle
 --
 
 * Why write tests?
-  + If you write a new function, and breaks an old one, that's good to know! 
+  + If you write a new function, and it breaks an old one, that's good to know! 
   + Reduces bugs, makes your package code more robust
   
 --
@@ -514,9 +639,10 @@ We'll skip over testing for today, because we just don't have time to cover ever
 # Check your R package
 * Use `devtools::check()` to run the same checks CRAN will run on your R package.
   + Use `devtools::build_win()` to run the checks on CRAN computers.
-* The first time, you'll likely get errors. Be patient. It will probably be .red[.Large[frustrating]], but ultimately worth the effort.
 
 --
+
+The first time, you'll likely get errors. Be patient. It will probably be .red[.Large[frustrating]], but ultimately worth the effort.
 
 ![](http://i.giphy.com/RhEvCHIeZAZ6E.gif)
 
@@ -542,7 +668,7 @@ class: center
 
 --
 
-* Automate wherever possible ({devtools} and {usethis} help a lot with this)
+* Automate wherever possible ([{devtools}](https://github.com/r-lib/devtools) and [{usethis}](https://github.com/r-lib/usethis) help a lot with this)
 
 --
 
